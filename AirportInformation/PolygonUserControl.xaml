@@ -1,0 +1,42 @@
+﻿<UserControl xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps" 
+    x:Class="AirportInformation.PolygonUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:ai="using:AirportInformation"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <UserControl.Resources>
+        <ai:BasicGeopositionToGeopointConverter x:Name="GeopointConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Width="59" x:Name="SigmetButton" FontSize="14" FontWeight="Light" BorderThickness="1" Click="OnShowSigmets">SIG</Button>
+            <Button Width="59" x:Name="IcingButton" FontSize="14" FontWeight="Light" BorderThickness="1" Click="OnShowIcing" Margin="5,0,0,0">IC</Button>
+            <Button Width="59" x:Name="TurbulenceButton" FontSize="14" FontWeight="Light" BorderThickness="1" Click="OnShowTurbulence" Margin="5,0,0,0">TB</Button>
+            <Button Width="59" x:Name="IfrButton" FontSize="14" FontWeight="Light" BorderThickness="1" Click="OnShowIfr" Margin="5,0,0,0">IFR</Button>
+            <Button Width="58" x:Name="ObscurationButton" FontSize="14" FontWeight="Light" BorderThickness="1" Click="OnShowMountainObscuration" Margin="5,0,0,0">OBS</Button>
+            <Button Width="58" x:Name="WxButton" FontSize="14" FontWeight="Light" BorderThickness="1" Click="OnWX" Margin="5,0,0,0">WX</Button>
+        </StackPanel>
+        <Maps:MapControl 
+            Grid.Row="1"
+            Center="{Binding Location, Converter={StaticResource GeopointConverter}}"
+            MapServiceToken="atbpbKyxQV8_SxEP_00vuA"  
+            ZoomLevel="5"
+            ZoomLevelChanged="OnZoomLevelChanged"
+            MapTapped="Map_OnMapTapped"
+            x:Name="Map">
+        </Maps:MapControl>
+        <ScrollViewer Grid.Row="2" MaxHeight="150" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Hidden">
+            <TextBlock FontSize="14" x:Name="RawText" TextWrapping="Wrap"></TextBlock>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

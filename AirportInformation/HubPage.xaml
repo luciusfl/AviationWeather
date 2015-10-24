@@ -1,0 +1,194 @@
+﻿<Page
+    x:Class="AirportInformation.HubPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
+    xmlns:ai="using:AirportInformation"    
+    xmlns:data="using:AirportInformation.Data"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <ai:StringFormatConverter x:Name="StringFormat" />
+        <ai:FlightRuleBrushConverter x:Name="FlightRuleBrush"/>
+        <ai:DistanceFromMyLocationConverter x:Name="Distance"/>
+        <ai:TimezoneConverter x:Name="Timezone"/>
+        <ai:FlightRuleColorConverter x:Name="FlightRuleColor"/>
+        <ai:TerminalForecastColorConverter x:Name="TafColor"/>
+        <ai:BooleanToVisibilityConverter x:Name="BoolToVisibility"/>
+        <ai:IntegerToVisibilityConverter x:Name="IntToVisibility"/>
+        <ai:DateTimeToTimeSinceConverter x:Name="TimeSince"/>
+
+        <DataTemplate x:Key="AirportMinimalTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="0,15,0,0" Grid.Row="0" VerticalAlignment="Top" Orientation="Horizontal">
+                    <TextBlock Text="{Binding Designator}" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource PhoneMidBrush}"/>
+                    <TextBlock Text="{Binding Name}" Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource PhoneMidBrush}" Margin="15,0,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <TextBlock Text="{Binding Location, Converter={StaticResource ResourceKey=Distance}, ConverterParameter='\{0:F0}nm'}" Style="{StaticResource BaseTextBlockStyle}" />
+                    <TextBlock Text="{Binding LongestRunwayLength, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=', Rwy {0}ft'}" Style="{StaticResource BaseTextBlockStyle}"/>
+                    <TextBlock Text="{Binding FieldElevation, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=', Elev {0:0}ft'}" Style="{StaticResource BaseTextBlockStyle}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Visibility="{Binding HasMetarStation, Converter={StaticResource ResourceKey=BoolToVisibility}}" Background="{Binding Metar, Converter={StaticResource FlightRuleBrush}}">
+                    <StackPanel Orientation="Horizontal" DataContext="{Binding Metar}">
+                        <TextBlock Text="{Binding observation_time, Converter={StaticResource TimeSince}}" Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock Text="{Binding metar_type}" Margin="10,0,0,0" Style="{ThemeResource BodyTextBlockStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" DataContext="{Binding Metar}">
+                        <TextBlock Visibility="{Binding wind_dir_degreesSpecified, Converter={StaticResource ResourceKey=BoolToVisibility}}" Text="{Binding wind_dir_degrees, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter='Wind {0}°'}" Margin="0,0,5,0" Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock Visibility="{Binding wind_speed_ktSpecified, Converter={StaticResource ResourceKey=BoolToVisibility}}" Text="{Binding wind_speed_kt, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter='@{0}kt'}" Margin="0,0,5,0" Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock Visibility="{Binding wind_gust_ktSpecified, Converter={StaticResource ResourceKey=BoolToVisibility}}" Text="{Binding wind_gust_kt, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter='G{0}'}" Margin="0,0,5,0" Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock Visibility="{Binding visibility_statute_miSpecified, Converter={StaticResource ResourceKey=BoolToVisibility}}" Text="{Binding visibility_statute_mi, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter='Vis {0:F0}mi'}" Margin="0,0,5,0" Style="{StaticResource BaseTextBlockStyle}"/>
+                    </StackPanel>                    
+                    <StackPanel Orientation="Horizontal" DataContext="{Binding Metar}">
+                        <TextBlock Visibility="{Binding temp_cSpecified, Converter={StaticResource ResourceKey=BoolToVisibility}}" Text="{Binding temp_c, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter='\Temp {0}'}" Style="{StaticResource BaseTextBlockStyle}" />
+                        <TextBlock Visibility="{Binding dewpoint_cSpecified, Converter={StaticResource ResourceKey=BoolToVisibility}}" Text="{Binding dewpoint_c, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter='/{0}°C'}" Style="{StaticResource BaseTextBlockStyle}"/>
+                        <TextBlock Visibility="{Binding altim_in_hgSpecified, Converter={StaticResource ResourceKey=BoolToVisibility}}" Text="{Binding altim_in_hg, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' {0:0.00} inHg'}" Style="{StaticResource BaseTextBlockStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" DataContext="{Binding Metar}">
+                        <ItemsControl Visibility="{Binding sky_condition.Length, Converter={StaticResource ResourceKey=IntToVisibility}}" ItemsSource="{Binding sky_condition}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding sky_cover}"  Style="{StaticResource BaseTextBlockStyle}"/>
+                                        <TextBlock Visibility="{Binding cloud_base_ft_aglSpecified, Converter={StaticResource ResourceKey=BoolToVisibility}}" Text="{Binding cloud_base_ft_agl, Converter={StaticResource ResourceKey=StringFormat}, ConverterParameter=' at {0}ft '}" Style="{StaticResource BaseTextBlockStyle}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <Style x:Key="LineItemStyle" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Background" Value="{Binding Path=Metar, Converter={StaticResource FlightRuleBrush}}"/>
+        </Style>
+
+        <Style x:Key="ItemsControlStyle" TargetType="ItemsControl">
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <StackPanel 
+                            Orientation="Vertical" 
+                            />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <ScrollViewer ZoomMode="Enabled"
+                              ZoomSnapPointsType="MandatorySingle"
+                              MinZoomFactor="1"
+                              MaxZoomFactor="4"
+                              HorizontalScrollMode="Enabled" 
+                              HorizontalScrollBarVisibility="Visible"
+                              >
+                            <ItemsPresenter 
+                                HorizontalAlignment="Left"    
+                                VerticalAlignment="Stretch"
+                                Width="500"                                
+                                IsHitTestVisible="False" 
+                                />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Hub x:Name="Hub" x:Uid="Hub">
+        <HubSection x:Uid="Home" Width="{Binding ScreenWidth}" Header="Airports Nearby">
+            <DataTemplate>
+                <ListView
+                    x:Name="itemListView"
+                    AutomationProperties.AutomationId="ItemListView"
+                    AutomationProperties.Name="Items In Group"
+                    TabIndex="1"
+                    IsItemClickEnabled="True"
+                    ItemClick="ItemListView_OnItemClick"
+                    SelectionMode="None"
+                    IsSwipeEnabled="true"
+                    ItemContainerStyle="{StaticResource LineItemStyle}" 
+                    ItemsSource="{Binding Path=ViewModel.AirportsNearby}"            
+                    ItemTemplate="{StaticResource AirportMinimalTemplate}"                             
+                    Margin="0,5,0,0"/>
+            </DataTemplate>
+        </HubSection>
+        <HubSection x:Uid="Synoptic Scale" Width="{Binding ScreenWidth}" Header="Synoptic Scale">
+            <DataTemplate>
+                <ItemsControl ItemsSource="{Binding ViewModel.WeatherImages}" Style="{StaticResource ItemsControlStyle}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DataTemplate>
+        </HubSection>
+        <HubSection x:Uid="Bookmarks" Width="{Binding ScreenWidth}" Header="Bookmarked Airports">
+            <DataTemplate>
+                <ListView
+                    x:Name="itemListView"
+                    AutomationProperties.AutomationId="ItemListView"
+                    AutomationProperties.Name="Items In Group"
+                    TabIndex="1"
+                    IsItemClickEnabled="True"
+                    ItemClick="ItemListView_OnItemClick"
+                    SelectionMode="None"
+                    IsSwipeEnabled="true"
+                    ItemContainerStyle="{StaticResource LineItemStyle}" 
+                    ItemsSource="{Binding ViewModel.AirportsBookmarked}"            
+                    ItemTemplate="{StaticResource AirportMinimalTemplate}"                             
+                    Margin="0,5,0,0"/>
+            </DataTemplate>
+        </HubSection>
+        <HubSection x:Uid="Search" Width="{Binding ScreenWidth}" x:Name="SearchHubSection" Header="Search Airport" >
+            <DataTemplate>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Style="{ThemeResource BaseTextBlockStyle}" Text="Airport:"></TextBlock>
+                    <TextBox VerticalContentAlignment="Center" Grid.Row="0" Grid.Column="1" Background="LightGray" GotFocus="SearchBox_OnGotFocus" Text="{Binding AirportIdDefaultSearch, Mode=TwoWay}"/>
+                    <TextBlock VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Style="{ThemeResource BaseTextBlockStyle}" Text="City:"></TextBlock>
+                    <TextBox VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="1" Background="LightGray" GotFocus="SearchBox_OnGotFocus" Text="{Binding CityNameDefaultSearch, Mode=TwoWay}"/>
+
+                    <Button Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"  HorizontalAlignment="Center" Click="OnSearchByAirportId">Search</Button>
+                    <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"  HorizontalAlignment="Center" Click="OnSearchByCity">Search</Button>
+
+                    <ListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                        IsItemClickEnabled="True"
+                        ItemClick="ItemListView_OnItemClick"
+                        SelectionMode="None"
+                        IsSwipeEnabled="true"
+                        ItemContainerStyle="{StaticResource LineItemStyle}" 
+                        ItemsSource="{Binding SearchResult}"            
+                        ItemTemplate="{StaticResource AirportMinimalTemplate}"/>
+                </Grid>
+            </DataTemplate>
+        </HubSection>
+    </Hub>
+</Page>

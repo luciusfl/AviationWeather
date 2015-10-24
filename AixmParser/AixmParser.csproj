@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{383DB037-4343-4655-A37C-478FAB0A2A71}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ParseAIXM</RootNamespace>
+    <AssemblyName>ParseAIXM</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Device" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\AixmDatabase\Airport.cs">
+      <Link>Airport.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\AirportBase.cs">
+      <Link>AirportBase.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\AirportDatabase.cs">
+      <Link>AirportDatabase.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\Atmosphere.cs">
+      <Link>Atmosphere.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\FlightRule.cs">
+      <Link>FlightRule.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\Haversine.cs">
+      <Link>Haversine.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\metar1_2.cs">
+      <Link>metar1_2.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\ModelOutputStatistic.cs">
+      <Link>ModelOutputStatistic.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\Notam.cs">
+      <Link>Notam.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\Runway.cs">
+      <Link>Runway.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\RunwayDirection.cs">
+      <Link>RunwayDirection.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\taf1_2.cs">
+      <Link>taf1_2.cs</Link>
+    </Compile>
+    <Compile Include="..\AixmDatabase\WindsAloft.cs">
+      <Link>WindsAloft.cs</Link>
+    </Compile>
+    <Compile Include="AirportSuppliesService.cs" />
+    <Compile Include="AixmParser.cs" />
+    <Compile Include="BasicGeoposition.cs" />
+    <Compile Include="FaaMember.cs" />
+    <Compile Include="AirportArtifactFactory.cs" />
+    <Compile Include="OrganisationAuthority.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RadioCommunicationChannel.cs" />
+    <Compile Include="TouchDownLiftOff.cs" />
+    <Compile Include="Unit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="stations.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="APT_AIXM.xml.short.xml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GFS MOS FORECASTS.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WindsAloft.txt" />
+    <None Include="Docu\AIXMSchemaDescription.html" />
+    <Content Include="Docu\basic_style.css" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

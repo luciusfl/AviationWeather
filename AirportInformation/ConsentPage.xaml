@@ -1,0 +1,25 @@
+﻿<Page
+    x:Class="AirportInformation.ConsentPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Margin="20,0,0,0">
+            <TextBlock Text="Aviation Weather for Pilots" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock Text="Consent" Margin="0,10,0,50" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <TextBlock TextWrapping="WrapWholeWords" Text="This application has not been certified for flight planning. For flight planning always check weather information by calling 1-800-WXBRIEF. All weather information are retrieved from authoritative sources, such as NOAA, FAA and NWS. Have a safe flight!" Style="{ThemeResource BodyTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,50,20,0">
+                <Button Width="140" Height ="75" Click="OnAcceptConsent" FontWeight="Normal" Background="DarkGreen" Margin="0,0,20,0">Accept</Button>
+                <Button Width="140" Height ="75" Click="OnDeclineConsent" FontWeight="Normal"  Background="DarkRed" Margin="20,0,10,0">Decline</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

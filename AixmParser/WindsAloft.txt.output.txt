@@ -1,0 +1,1 @@
+var windsAloftStationMap = new Dictionary<string, BasicGeoposition>\r\n{\r\n
